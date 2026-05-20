@@ -6,6 +6,18 @@ datasource db {
   provider = "postgresql"
 }
 
+enum MovementType {
+  ADJUSTMENT
+  TRANSFER
+  PURCHASE_RECEIPT
+  SALES_ISSUE
+}
+
+enum MovementStatus {
+  POSTED
+  VOIDED
+}
+
 model Product {
   id          Int              @id @default(autoincrement())
   sku         String           @unique
@@ -16,6 +28,7 @@ model Product {
   isActive    Boolean          @default(true)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+  stockMovementLines StockMovementLine[]
 
   @@index([name])
   @@index([categoryId])
@@ -41,6 +54,38 @@ model Warehouse {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  stockMovementLines StockMovementLine[]
 
   @@index([name])
+}
+
+model StockMovement {
+  id         Int            @id @default(autoincrement())
+  type       MovementType
+  status     MovementStatus @default(POSTED)
+  reference  String?
+  occurredAt DateTime       @default(now())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  lines      StockMovementLine[]
+
+  @@index([type])
+  @@index([status])
+  @@index([occurredAt])
+}
+
+model StockMovementLine {
+  id            Int            @id @default(autoincrement())
+  movementId    Int
+  movement      StockMovement  @relation(fields: [movementId], references: [id])
+  productId     Int
+  product       Product        @relation(fields: [productId], references: [id])
+  warehouseId   Int
+  warehouse     Warehouse      @relation(fields: [warehouseId], references: [id])
+  quantityDelta Decimal
+  createdAt     DateTime       @default(now())
+
+  @@index([movementId])
+  @@index([productId])
+  @@index([warehouseId])
 }
