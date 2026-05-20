@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma"
 type PaginationParams = {
   page?: number
   pageSize?: number
+  search?: string
+  status?: "all" | "active" | "inactive"
 }
 
 type PaginationMeta = {
@@ -32,8 +34,28 @@ export async function listWarehouses(
   const page = Math.max(1, Math.floor(params.page ?? 1))
   const pageSize = Math.min(100, Math.max(1, Math.floor(params.pageSize ?? 20)))
 
+  const search = params.search?.trim() || undefined
+  const status = ["active", "inactive"].includes(params.status ?? "")
+    ? (params.status as "active" | "inactive")
+    : undefined
+
+  const searchFilter = search
+    ? {
+        OR: [
+          { code: { contains: search, mode: "insensitive" as const } },
+          { name: { contains: search, mode: "insensitive" as const } },
+        ],
+      }
+    : undefined
+
+  const isActiveFilter = status ? { isActive: status === "active" } : undefined
+
+  const filters = [isActiveFilter, searchFilter].filter(Boolean)
+  const where = filters.length > 0 ? Object.assign({}, ...filters) : undefined
+
   const [rows, total] = await Promise.all([
     prisma.warehouse.findMany({
+      where,
       select: {
         id: true,
         code: true,
@@ -46,7 +68,7 @@ export async function listWarehouses(
       skip: (page - 1) * pageSize,
       take: pageSize,
     }),
-    prisma.warehouse.count(),
+    prisma.warehouse.count({ where }),
   ])
 
   return {

@@ -27,3 +27,13 @@ export const createWarehouseSchema = z.object({
 })
 
 export type CreateWarehouseInput = z.infer<typeof createWarehouseSchema>
+
+export const updateWarehouseSchema = z.object({
+  id: z.number().int().positive(),
+  code: codeField,
+  name: nameField,
+  address: addressField,
+  isActive: z.boolean().optional(),
+})
+
+export type UpdateWarehouseInput = z.infer<typeof updateWarehouseSchema>
