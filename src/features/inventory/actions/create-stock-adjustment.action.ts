@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { stockAdjustmentSchema } from "@/features/inventory/schemas/stock-adjustment.schema"
 import { postStockAdjustment, type PostStockAdjustmentResult } from "@/features/inventory/services/post-stock-adjustment.service"
 
@@ -29,7 +30,11 @@ export async function createStockAdjustment(
     return { success: false, error: errors }
   }
 
-  // TODO: revalidatePath("/inventory") once the inventory pages exist
+  const result = await postStockAdjustment(parsed.data)
 
-  return postStockAdjustment(parsed.data)
+  if (result.success) {
+    revalidatePath("/inventory")
+  }
+
+  return result
 }
