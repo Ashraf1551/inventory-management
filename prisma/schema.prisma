@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id          Int              @id @default(autoincrement())
+  sku         String           @unique
+  name        String
+  description String?
+  categoryId  Int?
+  category    ProductCategory? @relation(fields: [categoryId], references: [id])
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([name])
+  @@index([categoryId])
+}
+
+model ProductCategory {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  description String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@index([name])
+}
+
+model Warehouse {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  address   String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
