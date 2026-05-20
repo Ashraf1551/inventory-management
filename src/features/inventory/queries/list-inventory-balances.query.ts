@@ -1,5 +1,7 @@
 import "server-only"
 
+import type { Prisma } from "@prisma/client"
+
 import { prisma } from "@/lib/prisma"
 
 type PaginationParams = {
@@ -27,6 +29,22 @@ export type ListInventoryBalancesResult = {
   }>
   pagination: PaginationMeta
 }
+
+const inventoryBalanceSelect = {
+  id: true,
+  quantityOnHand: true,
+  updatedAt: true,
+  product: {
+    select: { id: true, sku: true, name: true },
+  },
+  warehouse: {
+    select: { id: true, code: true, name: true },
+  },
+} satisfies Prisma.InventoryBalanceSelect
+
+type InventoryBalanceDbRow = Prisma.InventoryBalanceGetPayload<{
+  select: typeof inventoryBalanceSelect
+}>
 
 export async function listInventoryBalances(
   params: PaginationParams = {}
@@ -69,17 +87,7 @@ export async function listInventoryBalances(
   const [dbRows, total] = await Promise.all([
     prisma.inventoryBalance.findMany({
       where,
-      select: {
-        id: true,
-        quantityOnHand: true,
-        updatedAt: true,
-        product: {
-          select: { id: true, sku: true, name: true },
-        },
-        warehouse: {
-          select: { id: true, code: true, name: true },
-        },
-      },
+      select: inventoryBalanceSelect,
       orderBy: { updatedAt: "desc" },
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -87,7 +95,7 @@ export async function listInventoryBalances(
     prisma.inventoryBalance.count({ where }),
   ])
 
-  const rows = dbRows.map((r) => ({
+  const rows = dbRows.map((r: InventoryBalanceDbRow) => ({
     ...r,
     quantityOnHand: Number(r.quantityOnHand),
   }))
