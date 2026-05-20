@@ -23,6 +23,7 @@ export type ListProductsResult = {
     sku: string
     name: string
     description: string | null
+    lowStockThreshold: number | null
     category: { id: number; name: string } | null
     isActive: boolean
     createdAt: Date
@@ -64,7 +65,7 @@ export async function listProducts(
     ? Object.assign({}, ...filters)
     : undefined
 
-  const [rows, total] = await Promise.all([
+  const [dbRows, total] = await Promise.all([
     prisma.product.findMany({
       where,
       select: {
@@ -72,6 +73,7 @@ export async function listProducts(
         sku: true,
         name: true,
         description: true,
+        lowStockThreshold: true,
         category: {
           select: { id: true, name: true },
         },
@@ -84,6 +86,11 @@ export async function listProducts(
     }),
     prisma.product.count({ where }),
   ])
+
+  const rows = dbRows.map((r) => ({
+    ...r,
+    lowStockThreshold: r.lowStockThreshold ? Number(r.lowStockThreshold) : null,
+  }))
 
   return {
     rows,

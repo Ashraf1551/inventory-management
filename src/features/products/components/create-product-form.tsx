@@ -58,6 +58,11 @@ export function CreateProductForm({ categories }: Props) {
       </div>
 
       <div>
+        <Label htmlFor="lowStockThreshold">Low Stock Threshold</Label>
+        <Input id="lowStockThreshold" name="lowStockThreshold" type="text" placeholder="Optional minimum stock level..." />
+      </div>
+
+      <div>
         <Label htmlFor="categoryId">Category</Label>
         <select
           id="categoryId"

@@ -26,11 +26,28 @@ const categoryIdField = z
   .pipe(z.union([z.number().int().positive(), z.null()]))
   .default(null)
 
+const lowStockThresholdField = z
+  .union([
+    z
+      .string()
+      .transform((v) => (v === "" ? null : Number(v)))
+      .pipe(z.union([z.number().finite().nonnegative(), z.null()])),
+    z
+      .number()
+      .finite()
+      .nonnegative()
+      .nullable()
+      .transform((v) => v ?? null),
+  ])
+  .optional()
+  .default(null)
+
 export const createProductSchema = z.object({
   sku: skuField,
   name: nameField,
   description: descriptionField,
   categoryId: categoryIdField,
+  lowStockThreshold: lowStockThresholdField,
   isActive: z.boolean().optional().default(true),
 })
 
@@ -42,6 +59,7 @@ export const updateProductSchema = z.object({
   name: nameField,
   description: descriptionField,
   categoryId: categoryIdField,
+  lowStockThreshold: lowStockThresholdField,
   isActive: z.boolean().optional(),
 })
 

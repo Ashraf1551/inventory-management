@@ -7,6 +7,7 @@ export type GetProductResult = {
   sku: string
   name: string
   description: string | null
+  lowStockThreshold: number | null
   category: { id: number; name: string } | null
   isActive: boolean
   createdAt: Date
@@ -14,13 +15,14 @@ export type GetProductResult = {
 } | null
 
 export async function getProduct(id: number): Promise<GetProductResult> {
-  return prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { id },
     select: {
       id: true,
       sku: true,
       name: true,
       description: true,
+      lowStockThreshold: true,
       category: {
         select: { id: true, name: true },
       },
@@ -29,4 +31,11 @@ export async function getProduct(id: number): Promise<GetProductResult> {
       updatedAt: true,
     },
   })
+
+  if (!product) return null
+
+  return {
+    ...product,
+    lowStockThreshold: product.lowStockThreshold ? Number(product.lowStockThreshold) : null,
+  }
 }

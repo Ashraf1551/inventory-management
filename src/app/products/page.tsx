@@ -96,6 +96,7 @@ export default async function ProductsPage({ searchParams }: Props) {
             <TableHead>Description</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Low Stock</TableHead>
             <TableHead>Created</TableHead>
           </TableRow>
         </TableHeader>
@@ -117,6 +118,7 @@ export default async function ProductsPage({ searchParams }: Props) {
               <TableCell>
                 {product.isActive ? "Active" : "Inactive"}
               </TableCell>
+              <TableCell>{product.lowStockThreshold != null ? product.lowStockThreshold : "Not set"}</TableCell>
               <TableCell>
                 {product.createdAt.toLocaleDateString()}
               </TableCell>
@@ -124,7 +126,7 @@ export default async function ProductsPage({ searchParams }: Props) {
           ))}
           {rows.length === 0 && (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground">
+              <TableCell colSpan={7} className="text-center text-muted-foreground">
                 No products found.
               </TableCell>
             </TableRow>

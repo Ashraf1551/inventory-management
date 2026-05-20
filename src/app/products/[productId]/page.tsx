@@ -65,6 +65,9 @@ export default async function ProductDetailPage({ params }: Props) {
               </div>
             </dd>
 
+            <dt className="font-semibold">Low Stock Threshold</dt>
+            <dd>{product.lowStockThreshold != null ? product.lowStockThreshold : "Not set"}</dd>
+
             <dt className="font-semibold">Created</dt>
             <dd>{product.createdAt.toLocaleDateString()}</dd>
 

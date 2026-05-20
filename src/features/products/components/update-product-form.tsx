@@ -15,6 +15,7 @@ type Props = {
     sku: string
     name: string
     description: string | null
+    lowStockThreshold: number | null
     category: { id: number } | null
     isActive: boolean
   }
@@ -58,6 +59,11 @@ export function UpdateProductForm({ product, categories }: Props) {
       <div>
         <Label htmlFor="update-description">Description</Label>
         <Textarea id="update-description" name="description" rows={3} defaultValue={product.description ?? ""} />
+      </div>
+
+      <div>
+        <Label htmlFor="update-low-stock-threshold">Low Stock Threshold</Label>
+        <Input id="update-low-stock-threshold" name="lowStockThreshold" type="text" placeholder="Optional minimum stock level..." defaultValue={product.lowStockThreshold ?? ""} />
       </div>
 
       <div>
