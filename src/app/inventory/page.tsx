@@ -10,6 +10,7 @@ import {
   TableCell,
 } from "@/components/ui/table"
 import { StockAdjustmentForm } from "@/features/inventory/components/stock-adjustment-form"
+import { StockTransferForm } from "@/features/inventory/components/stock-transfer-form"
 import { listActiveProducts } from "@/features/products/queries/list-active-products.query"
 import { listActiveWarehouses } from "@/features/warehouses/queries/list-active-warehouses.query"
 import { listInventoryBalances } from "@/features/inventory/queries/list-inventory-balances.query"
@@ -111,6 +112,8 @@ export default async function InventoryPage({ searchParams }: Props) {
       </div>
 
       <StockAdjustmentForm products={products} warehouses={warehouses} />
+
+      <StockTransferForm products={products} warehouses={warehouses} />
 
       <Table>
         <TableHeader>
