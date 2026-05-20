@@ -29,6 +29,7 @@ model Product {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   stockMovementLines StockMovementLine[]
+  inventoryBalances   InventoryBalance[]
 
   @@index([name])
   @@index([categoryId])
@@ -55,6 +56,7 @@ model Warehouse {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   stockMovementLines StockMovementLine[]
+  inventoryBalances   InventoryBalance[]
 
   @@index([name])
 }
@@ -86,6 +88,21 @@ model StockMovementLine {
   createdAt     DateTime       @default(now())
 
   @@index([movementId])
+  @@index([productId])
+  @@index([warehouseId])
+}
+
+model InventoryBalance {
+  id             Int      @id @default(autoincrement())
+  productId      Int
+  product        Product  @relation(fields: [productId], references: [id])
+  warehouseId    Int
+  warehouse      Warehouse @relation(fields: [warehouseId], references: [id])
+  quantityOnHand Decimal
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([productId, warehouseId])
   @@index([productId])
   @@index([warehouseId])
 }
