@@ -65,27 +65,27 @@ export function UpdateProductForm({ product, categories }: Props) {
 
           <input type="hidden" name="id" value={product.id} />
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-sku">SKU</Label>
             <Input id="update-sku" name="sku" type="text" required defaultValue={product.sku} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-name">Name</Label>
             <Input id="update-name" name="name" type="text" required defaultValue={product.name} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-description">Description</Label>
             <Textarea id="update-description" name="description" rows={3} defaultValue={product.description ?? ""} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-low-stock-threshold">Low Stock Threshold</Label>
             <Input id="update-low-stock-threshold" name="lowStockThreshold" type="text" placeholder="Optional minimum stock level..." defaultValue={product.lowStockThreshold ?? ""} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-categoryId">Category</Label>
             <Select name="categoryId" defaultValue={String(product.category?.id ?? "")}>
               <SelectTrigger className="w-full" id="update-categoryId">

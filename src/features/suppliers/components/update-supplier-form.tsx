@@ -49,22 +49,22 @@ export function UpdateSupplierForm({ supplier }: Props) {
 
           <input type="hidden" name="id" value={supplier.id} />
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="edit-supplier-name">Name</Label>
             <Input id="edit-supplier-name" name="name" type="text" required defaultValue={supplier.name} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="edit-supplier-email">Email</Label>
             <Input id="edit-supplier-email" name="email" type="email" placeholder="Optional..." defaultValue={supplier.email ?? ""} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="edit-supplier-phone">Phone</Label>
             <Input id="edit-supplier-phone" name="phone" type="text" placeholder="Optional..." defaultValue={supplier.phone ?? ""} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="edit-supplier-address">Address</Label>
             <Textarea id="edit-supplier-address" name="address" rows={2} placeholder="Optional..." defaultValue={supplier.address ?? ""} />
           </div>

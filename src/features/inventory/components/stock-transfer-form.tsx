@@ -68,7 +68,7 @@ export function StockTransferForm({ products, warehouses }: Props) {
             </Alert>
           )}
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="transfer-product-id">Product</Label>
             <Select name="productId" defaultValue="">
               <SelectTrigger className="w-full" id="transfer-product-id">
@@ -84,7 +84,7 @@ export function StockTransferForm({ products, warehouses }: Props) {
             </Select>
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="transfer-from-warehouse">Source Warehouse</Label>
             <Select
               name="fromWarehouseId"
@@ -104,7 +104,7 @@ export function StockTransferForm({ products, warehouses }: Props) {
             </Select>
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="transfer-to-warehouse">Destination Warehouse</Label>
             <Select name="toWarehouseId" defaultValue="">
               <SelectTrigger className="w-full" id="transfer-to-warehouse">
@@ -120,17 +120,17 @@ export function StockTransferForm({ products, warehouses }: Props) {
             </Select>
           </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="transfer-quantity">Quantity</Label>
         <Input id="transfer-quantity" name="quantity" type="text" required placeholder="e.g. 10" />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="transfer-reference">Reference</Label>
         <Input id="transfer-reference" name="reference" type="text" placeholder="Optional reference..." />
       </div>
 
-      <div>
+      <div className="space-y-2">
         <Label htmlFor="transfer-occurred-at">Occurred Date</Label>
         <DatePicker id="transfer-occurred-at" name="occurredAt" value={occurredAt} onChange={setOccurredAt} />
       </div>

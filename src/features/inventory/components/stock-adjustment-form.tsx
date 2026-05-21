@@ -64,7 +64,7 @@ export function StockAdjustmentForm({ products, warehouses }: Props) {
             </Alert>
           )}
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="adjustment-product-id">Product</Label>
             <Select name="productId" defaultValue="">
               <SelectTrigger className="w-full" id="adjustment-product-id">
@@ -80,7 +80,7 @@ export function StockAdjustmentForm({ products, warehouses }: Props) {
             </Select>
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="adjustment-warehouse-id">Warehouse</Label>
             <Select name="warehouseId" defaultValue="">
               <SelectTrigger className="w-full" id="adjustment-warehouse-id">
@@ -96,17 +96,17 @@ export function StockAdjustmentForm({ products, warehouses }: Props) {
             </Select>
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="quantityDelta">Quantity Delta</Label>
             <Input id="quantityDelta" name="quantityDelta" type="text" required placeholder="e.g. 10 or -5" />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="reference">Reference</Label>
             <Input id="reference" name="reference" type="text" placeholder="Optional reference..." />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="occurredAt">Occurred Date</Label>
             <DatePicker id="occurredAt" name="occurredAt" value={occurredAt} onChange={setOccurredAt} />
           </div>

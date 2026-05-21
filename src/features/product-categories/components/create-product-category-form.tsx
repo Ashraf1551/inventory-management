@@ -49,12 +49,12 @@ export function CreateProductCategoryForm() {
             </Alert>
           )}
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input id="name" name="name" type="text" required />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
             <Textarea id="description" name="description" rows={3} />
           </div>

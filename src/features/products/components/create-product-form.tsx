@@ -61,27 +61,27 @@ export function CreateProductForm({ categories }: Props) {
             </Alert>
           )}
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="sku">SKU</Label>
             <Input id="sku" name="sku" type="text" required />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input id="name" name="name" type="text" required />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
             <Textarea id="description" name="description" rows={3} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="lowStockThreshold">Low Stock Threshold</Label>
             <Input id="lowStockThreshold" name="lowStockThreshold" type="text" placeholder="Optional minimum stock level..." />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="categoryId">Category</Label>
             <Select name="categoryId" defaultValue="">
               <SelectTrigger className="w-full" id="categoryId">

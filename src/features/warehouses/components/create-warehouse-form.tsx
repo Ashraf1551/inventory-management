@@ -49,17 +49,17 @@ export function CreateWarehouseForm() {
             </Alert>
           )}
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="code">Code</Label>
             <Input id="code" name="code" type="text" required />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
             <Input id="name" name="name" type="text" required />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="address">Address</Label>
             <Textarea id="address" name="address" rows={3} />
           </div>

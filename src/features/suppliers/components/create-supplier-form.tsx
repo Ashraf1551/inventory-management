@@ -49,22 +49,22 @@ export function CreateSupplierForm() {
             </Alert>
           )}
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="supplier-name">Name</Label>
             <Input id="supplier-name" name="name" type="text" required />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="supplier-email">Email</Label>
             <Input id="supplier-email" name="email" type="email" placeholder="Optional..." />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="supplier-phone">Phone</Label>
             <Input id="supplier-phone" name="phone" type="text" placeholder="Optional..." />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="supplier-address">Address</Label>
             <Textarea id="supplier-address" name="address" rows={2} placeholder="Optional..." />
           </div>

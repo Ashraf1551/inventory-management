@@ -53,12 +53,12 @@ export function UpdateProductCategoryForm({ category }: Props) {
 
           <input type="hidden" name="id" value={category.id} />
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-name">Name</Label>
             <Input id="update-name" name="name" type="text" required defaultValue={category.name} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-description">Description</Label>
             <Textarea id="update-description" name="description" rows={3} defaultValue={category.description ?? ""} />
           </div>

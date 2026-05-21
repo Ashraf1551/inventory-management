@@ -54,17 +54,17 @@ export function UpdateWarehouseForm({ warehouse }: Props) {
 
           <input type="hidden" name="id" value={warehouse.id} />
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-code">Code</Label>
             <Input id="update-code" name="code" type="text" required defaultValue={warehouse.code} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-name">Name</Label>
             <Input id="update-name" name="name" type="text" required defaultValue={warehouse.name} />
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="update-address">Address</Label>
             <Textarea id="update-address" name="address" rows={3} defaultValue={warehouse.address ?? ""} />
           </div>
