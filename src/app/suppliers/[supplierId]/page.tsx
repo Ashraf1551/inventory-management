@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
   Card,
   CardHeader,
@@ -30,8 +31,8 @@ export default async function SupplierDetailPage({ params }: Props) {
 
   return (
     <div className="p-6">
-      <Link href="/suppliers">
-        <Button variant="link" className="px-0">&larr; Back to Suppliers</Button>
+      <Link href="/suppliers" className={cn(buttonVariants({ variant: "link" }), "px-0")}>
+        &larr; Back to Suppliers
       </Link>
 
       <UpdateSupplierForm supplier={supplier} />

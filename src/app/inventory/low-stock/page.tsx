@@ -1,6 +1,7 @@
 import Form from "next/form"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
   Table,
   TableHeader,
@@ -86,14 +87,14 @@ export default async function LowStockPage({ searchParams }: Props) {
         {pagination.page > 1 ? (
           <a
             href={paginationHref(baseUrl, pagination.page - 1, pagination.pageSize, search)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Previous
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Previous
-          </span>
+          </Button>
         )}
 
         <span>
@@ -103,14 +104,14 @@ export default async function LowStockPage({ searchParams }: Props) {
         {pagination.page < pagination.totalPages ? (
           <a
             href={paginationHref(baseUrl, pagination.page + 1, pagination.pageSize, search)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Next
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Next
-          </span>
+          </Button>
         )}
       </div>
     </div>

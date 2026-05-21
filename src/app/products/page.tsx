@@ -1,6 +1,8 @@
+import Link from "next/link"
 import Form from "next/form"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import {
   Table,
   TableHeader,
@@ -104,14 +106,14 @@ export default async function ProductsPage({ searchParams }: Props) {
           {rows.map((product) => (
             <TableRow key={product.id}>
               <TableCell>
-                <a href={`/products/${product.id}`} className="hover:underline">
+                <Link href={`/products/${product.id}`} className="hover:underline">
                   {product.sku}
-                </a>
+                </Link>
               </TableCell>
               <TableCell>
-                <a href={`/products/${product.id}`} className="hover:underline">
+                <Link href={`/products/${product.id}`} className="hover:underline">
                   {product.name}
-                </a>
+                </Link>
               </TableCell>
               <TableCell>{product.description ?? "—"}</TableCell>
               <TableCell>{product.category?.name ?? "Uncategorized"}</TableCell>
@@ -138,14 +140,14 @@ export default async function ProductsPage({ searchParams }: Props) {
         {pagination.page > 1 ? (
           <a
             href={paginationHref(baseUrl, pagination.page - 1, pagination.pageSize, search, status, categoryId)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Previous
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Previous
-          </span>
+          </Button>
         )}
 
         <span>
@@ -155,14 +157,14 @@ export default async function ProductsPage({ searchParams }: Props) {
         {pagination.page < pagination.totalPages ? (
           <a
             href={paginationHref(baseUrl, pagination.page + 1, pagination.pageSize, search, status, categoryId)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Next
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Next
-          </span>
+          </Button>
         )}
       </div>
     </div>

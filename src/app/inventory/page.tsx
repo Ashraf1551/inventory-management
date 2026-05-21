@@ -1,6 +1,8 @@
 import Form from "next/form"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 import {
   Table,
   TableHeader,
@@ -67,9 +69,9 @@ export default async function InventoryPage({ searchParams }: Props) {
         <form action="/inventory" className="flex items-center gap-2">
           <input type="hidden" name="search" value={search ?? ""} />
           <input type="hidden" name="warehouseId" value={warehouseId ?? ""} />
-          <label htmlFor="product-filter" className="text-sm font-medium whitespace-nowrap">
+          <Label htmlFor="product-filter">
             Product
-          </label>
+          </Label>
           <select
             id="product-filter"
             name="productId"
@@ -90,9 +92,9 @@ export default async function InventoryPage({ searchParams }: Props) {
         <form action="/inventory" className="flex items-center gap-2">
           <input type="hidden" name="search" value={search ?? ""} />
           <input type="hidden" name="productId" value={productId ?? ""} />
-          <label htmlFor="warehouse-filter" className="text-sm font-medium whitespace-nowrap">
+          <Label htmlFor="warehouse-filter">
             Warehouse
-          </label>
+          </Label>
           <select
             id="warehouse-filter"
             name="warehouseId"
@@ -151,14 +153,14 @@ export default async function InventoryPage({ searchParams }: Props) {
         {pagination.page > 1 ? (
           <a
             href={paginationHref(baseUrl, pagination.page - 1, pagination.pageSize, search, productId, warehouseId)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Previous
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Previous
-          </span>
+          </Button>
         )}
 
         <span>
@@ -168,14 +170,14 @@ export default async function InventoryPage({ searchParams }: Props) {
         {pagination.page < pagination.totalPages ? (
           <a
             href={paginationHref(baseUrl, pagination.page + 1, pagination.pageSize, search, productId, warehouseId)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Next
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Next
-          </span>
+          </Button>
         )}
       </div>
     </div>

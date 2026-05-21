@@ -1,6 +1,8 @@
 import Form from "next/form"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 import {
   Table,
   TableHeader,
@@ -143,9 +145,9 @@ export default async function MovementsPage({ searchParams }: Props) {
           <input type="hidden" name="warehouseId" value={currentWarehouseId ?? ""} />
           <input type="hidden" name="from" value={currentFrom ?? ""} />
           <input type="hidden" name="to" value={currentTo ?? ""} />
-          <label htmlFor="movements-product-filter" className="text-sm font-medium whitespace-nowrap">
+          <Label htmlFor="movements-product-filter">
             Product
-          </label>
+          </Label>
           <select
             id="movements-product-filter"
             name="productId"
@@ -170,9 +172,9 @@ export default async function MovementsPage({ searchParams }: Props) {
           <input type="hidden" name="productId" value={currentProductId ?? ""} />
           <input type="hidden" name="from" value={currentFrom ?? ""} />
           <input type="hidden" name="to" value={currentTo ?? ""} />
-          <label htmlFor="movements-warehouse-filter" className="text-sm font-medium whitespace-nowrap">
+          <Label htmlFor="movements-warehouse-filter">
             Warehouse
-          </label>
+          </Label>
           <select
             id="movements-warehouse-filter"
             name="warehouseId"
@@ -196,9 +198,9 @@ export default async function MovementsPage({ searchParams }: Props) {
           <input type="hidden" name="status" value={currentStatus ?? ""} />
           <input type="hidden" name="productId" value={currentProductId ?? ""} />
           <input type="hidden" name="warehouseId" value={currentWarehouseId ?? ""} />
-          <label htmlFor="movements-from" className="text-sm font-medium whitespace-nowrap">
+          <Label htmlFor="movements-from">
             From
-          </label>
+          </Label>
           <Input
             id="movements-from"
             name="from"
@@ -206,9 +208,9 @@ export default async function MovementsPage({ searchParams }: Props) {
             defaultValue={currentFrom ?? ""}
             className="max-w-40"
           />
-          <label htmlFor="movements-to" className="text-sm font-medium whitespace-nowrap">
+          <Label htmlFor="movements-to">
             To
-          </label>
+          </Label>
           <Input
             id="movements-to"
             name="to"
@@ -279,14 +281,14 @@ export default async function MovementsPage({ searchParams }: Props) {
         {pagination.page > 1 ? (
           <a
             href={paginationHref(baseUrl, pagination.page - 1, pagination.pageSize, search, currentType, currentStatus, currentProductId, currentWarehouseId, currentFrom, currentTo)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Previous
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Previous
-          </span>
+          </Button>
         )}
 
         <span>
@@ -296,14 +298,14 @@ export default async function MovementsPage({ searchParams }: Props) {
         {pagination.page < pagination.totalPages ? (
           <a
             href={paginationHref(baseUrl, pagination.page + 1, pagination.pageSize, search, currentType, currentStatus, currentProductId, currentWarehouseId, currentFrom, currentTo)}
-            className="px-3 py-1 border rounded hover:bg-muted"
+            className={cn(buttonVariants({ variant: "outline" }))}
           >
             Next
           </a>
         ) : (
-          <span className="px-3 py-1 border rounded text-muted-foreground">
+          <Button variant="outline" disabled>
             Next
-          </span>
+          </Button>
         )}
       </div>
     </div>
