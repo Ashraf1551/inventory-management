@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Inventory Management System
 
-## Getting Started
+A web-based tool to track every item in stock across multiple storage locations — a digital ledger for your warehouse(s).
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1. Manage Your Catalog
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Products** — Add products with a unique SKU (like a barcode), name, description, and category.
+- **Categories** — Group products for easier organization (e.g. "Electronics", "Raw Materials").
+- Products and categories can be marked **active or inactive** (no permanent deletion — just hide them).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Manage Locations
 
-## Learn More
+- **Warehouses** — Set up physical or virtual storage locations with a code, name, and address.
+- The system knows exactly how much of each product is in each warehouse.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Manage Suppliers
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Keep a directory of **suppliers** with contact details.
+- Each purchase receipt (stock coming in) is linked to a supplier.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Track All Stock Movements
 
-## Deploy on Vercel
+Three ways stock moves in or out:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Movement | What it does |
+|---|---|
+| **Adjustment** | Manually increase or decrease stock at a specific warehouse (e.g. write off damaged goods, or add found units). |
+| **Transfer** | Move stock from one warehouse to another (e.g. shift 50 units from main warehouse to a retail store). |
+| **Purchase Receipt** *(coming soon)* | Record stock received from a supplier. |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Every movement is **permanently logged** — you can always look back at the full history.
+
+### 5. Check Stock Levels & Reports
+
+- **Inventory Dashboard** — See current stock quantities for every product at every warehouse.
+- **Low Stock Report** — Automatically highlights products running low (based on a threshold you set per product), sorted with the most critical items first.
+- **Movement History** — A full audit trail filterable by date range, movement type, product, or warehouse.
+
+---
+
+## Key Business Rules
+
+- **Stock can never go negative** — the system won't let you adjust, transfer, or issue more stock than you actually have.
+- **Every movement is recorded** — no way to change stock without leaving a trace.
+- **No permanent deletions** — items are marked inactive, so historical data stays intact.
+- **No login required** — designed for internal back-office use (user accounts not yet set up).
+
+---
+
+## What's Planned (Not Yet Built)
+
+- Purchase receipts (recording goods received from suppliers)
+- Sales issues (recording stock sold or shipped to customers)
+- User accounts and permissions
+
+---
+
+## Tech Stack (for developers)
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS, shadcn/ui |
+| Database | Neon Serverless PostgreSQL |
+| ORM | Prisma |
+| Validation | Zod |
