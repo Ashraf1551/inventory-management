@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useState, useEffect, useCallback } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -11,34 +12,61 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import {
   Archive,
   Box,
   Building2,
+  ChevronDown,
   LayoutDashboard,
   Package,
   Tag,
   Truck,
   Warehouse,
 } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
+import {
+  Collapsible,
+  CollapsibleContent,
+} from "@/components/ui/collapsible"
 
-const navItems = [
+const topItemsBefore = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Inventory", url: "/inventory", icon: Archive },
-  { title: "Low Stock", url: "/inventory/low-stock", icon: Package },
-  { title: "Movements", url: "/inventory/movements", icon: Truck },
   { title: "Products", url: "/products", icon: Box },
   { title: "Categories", url: "/product-categories", icon: Tag },
-  { title: "Suppliers", url: "/suppliers", icon: Building2 },
+]
+
+const topItemsAfter = [
   { title: "Warehouses", url: "/warehouses", icon: Warehouse },
+  { title: "Suppliers", url: "/suppliers", icon: Building2 },
+]
+
+const inventorySubItems = [
+  { title: "Low Stock", url: "/inventory/low-stock", icon: Package },
+  { title: "Movements", url: "/inventory/movements", icon: Truck },
 ]
 
 export function AppSidebar() {
   const pathname = usePathname()
+
+  const isInventoryActive = pathname === "/inventory" || pathname.startsWith("/inventory/")
+
+  const [inventoryOpen, setInventoryOpen] = useState(isInventoryActive)
+
+  useEffect(() => {
+    if (isInventoryActive) setInventoryOpen(true)
+  }, [isInventoryActive])
+
+  const toggleInventory = useCallback(() => {
+    setInventoryOpen((prev) => !prev)
+  }, [])
 
   return (
     <Sidebar variant="inset" collapsible="icon">
@@ -62,7 +90,51 @@ export function AppSidebar() {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
+              {topItemsBefore.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton
+                    isActive={pathname === item.url}
+                    tooltip={item.title}
+                    render={<Link href={item.url} />}
+                  >
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+
+              <Collapsible open={inventoryOpen} onOpenChange={setInventoryOpen}>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={isInventoryActive}
+                    tooltip="Inventory"
+                    render={<Link href="/inventory" />}
+                  >
+                    <Archive />
+                    <span>Inventory</span>
+                  </SidebarMenuButton>
+                  <SidebarMenuAction onClick={toggleInventory}>
+                    <ChevronDown className={cn("transition-transform", inventoryOpen && "rotate-180")} />
+                  </SidebarMenuAction>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {inventorySubItems.map((sub) => (
+                        <SidebarMenuSubItem key={sub.title}>
+                          <SidebarMenuSubButton
+                            isActive={pathname === sub.url}
+                            render={<Link href={sub.url} />}
+                          >
+                            <sub.icon />
+                            <span>{sub.title}</span>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+
+              {topItemsAfter.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     isActive={pathname === item.url}

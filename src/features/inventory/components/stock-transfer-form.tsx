@@ -4,6 +4,7 @@ import { useActionState, useRef, useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { DatePicker } from "@/components/ui/date-picker"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import {
   Select,
@@ -34,11 +35,13 @@ export function StockTransferForm({ products, warehouses }: Props) {
     null
   )
   const [fromWarehouseId, setFromWarehouseId] = useState("")
+  const [occurredAt, setOccurredAt] = useState("")
 
   useEffect(() => {
     if (state?.success) {
       formRef.current?.reset()
       setFromWarehouseId("")
+      setOccurredAt("")
     }
   }, [state])
 
@@ -129,7 +132,7 @@ export function StockTransferForm({ products, warehouses }: Props) {
 
       <div>
         <Label htmlFor="transfer-occurred-at">Occurred Date</Label>
-        <Input id="transfer-occurred-at" name="occurredAt" type="date" />
+        <DatePicker id="transfer-occurred-at" name="occurredAt" value={occurredAt} onChange={setOccurredAt} />
       </div>
 
       <Button type="submit" disabled={isPending}>

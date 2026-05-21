@@ -1,9 +1,10 @@
 "use client"
 
-import { useActionState, useRef, useEffect } from "react"
+import { useActionState, useRef, useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { DatePicker } from "@/components/ui/date-picker"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import {
   Select,
@@ -29,6 +30,7 @@ type Props = {
 
 export function StockAdjustmentForm({ products, warehouses }: Props) {
   const formRef = useRef<HTMLFormElement>(null)
+  const [occurredAt, setOccurredAt] = useState("")
   const [state, formAction, isPending] = useActionState<CreateStockAdjustmentResult | null, FormData>(
     createStockAdjustment,
     null
@@ -37,6 +39,7 @@ export function StockAdjustmentForm({ products, warehouses }: Props) {
   useEffect(() => {
     if (state?.success) {
       formRef.current?.reset()
+      setOccurredAt("")
     }
   }, [state])
 
@@ -105,7 +108,7 @@ export function StockAdjustmentForm({ products, warehouses }: Props) {
 
           <div>
             <Label htmlFor="occurredAt">Occurred Date</Label>
-            <Input id="occurredAt" name="occurredAt" type="date" />
+            <DatePicker id="occurredAt" name="occurredAt" value={occurredAt} onChange={setOccurredAt} />
           </div>
 
           <Button type="submit" disabled={isPending}>

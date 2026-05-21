@@ -22,6 +22,7 @@ import {
 import { listActiveProducts } from "@/features/products/queries/list-active-products.query"
 import { listActiveWarehouses } from "@/features/warehouses/queries/list-active-warehouses.query"
 import { listStockMovements } from "@/features/inventory/queries/list-stock-movements.query"
+import { MovementDateFilter } from "@/features/inventory/components/movement-date-filter"
 
 type Props = {
   searchParams: Promise<{ page?: string; pageSize?: string; search?: string; type?: string; status?: string; productId?: string; warehouseId?: string; from?: string; to?: string }>
@@ -202,36 +203,15 @@ export default async function MovementsPage({ searchParams }: Props) {
           </Button>
         </form>
 
-        <form action="/inventory/movements" className="flex items-center gap-2">
-          <input type="hidden" name="search" value={search ?? ""} />
-          <input type="hidden" name="type" value={currentType ?? ""} />
-          <input type="hidden" name="status" value={currentStatus ?? ""} />
-          <input type="hidden" name="productId" value={currentProductId ?? ""} />
-          <input type="hidden" name="warehouseId" value={currentWarehouseId ?? ""} />
-          <Label htmlFor="movements-from">
-            From
-          </Label>
-          <Input
-            id="movements-from"
-            name="from"
-            type="date"
-            defaultValue={currentFrom ?? ""}
-            className="max-w-40"
-          />
-          <Label htmlFor="movements-to">
-            To
-          </Label>
-          <Input
-            id="movements-to"
-            name="to"
-            type="date"
-            defaultValue={currentTo ?? ""}
-            className="max-w-40"
-          />
-          <Button type="submit" size="xs">
-            Filter
-          </Button>
-        </form>
+        <MovementDateFilter
+          search={search ?? ""}
+          type={currentType ?? ""}
+          status={currentStatus ?? ""}
+          productId={currentProductId ?? ""}
+          warehouseId={currentWarehouseId ?? ""}
+          from={currentFrom ?? ""}
+          to={currentTo ?? ""}
+        />
       </div>
 
       <Table>
