@@ -1,27 +1,38 @@
-"use client"
+"use client";
 
-import { CalendarIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
 
 type Props = {
-  value?: string
-  onChange?: (value: string) => void
-  id?: string
-  name?: string
-  className?: string
-  placeholder?: string
-}
+  value?: string;
+  onChange?: (value: string) => void;
+  id?: string;
+  name?: string;
+  className?: string;
+  placeholder?: string;
+};
 
-export function DatePicker({ value, onChange, id, name, className, placeholder = "Pick a date" }: Props) {
-  const date = value ? new Date(value + "T00:00:00") : undefined
+export function DatePicker({
+  value,
+  onChange,
+  id,
+  name,
+  className,
+  placeholder = "Pick a date",
+}: Props) {
+  const date = value ? new Date(value + "T00:00:00") : undefined;
 
   function handleSelect(selected: Date | undefined) {
     if (selected) {
-      const iso = selected.toISOString().split("T")[0]
-      onChange?.(iso)
+      const iso = selected.toISOString().split("T")[0];
+      onChange?.(iso);
     }
   }
 
@@ -33,14 +44,18 @@ export function DatePicker({ value, onChange, id, name, className, placeholder =
         render={
           <Button
             variant="outline"
-            className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground", className)}
+            className={cn(
+              "w-full justify-start text-left font-normal",
+              !date && "text-muted-foreground",
+              className,
+            )}
           >
             <CalendarIcon className="mr-2 size-4" />
             {date ? date.toLocaleDateString() : <span>{placeholder}</span>}
           </Button>
         }
       />
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-0 scheme-light dark:scheme-dark">
         <Calendar
           mode="single"
           selected={date}
@@ -50,5 +65,5 @@ export function DatePicker({ value, onChange, id, name, className, placeholder =
         />
       </PopoverContent>
     </Popover>
-  )
+  );
 }
