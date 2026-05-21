@@ -18,6 +18,12 @@ enum MovementStatus {
   VOIDED
 }
 
+enum PurchaseReceiptStatus {
+  DRAFT
+  POSTED
+  VOIDED
+}
+
 model Product {
   id                 Int              @id @default(autoincrement())
   sku                String           @unique
@@ -31,6 +37,7 @@ model Product {
   updatedAt          DateTime         @updatedAt
   stockMovementLines StockMovementLine[]
   inventoryBalances   InventoryBalance[]
+  purchaseReceiptLines PurchaseReceiptLine[]
 
   @@index([name])
   @@index([categoryId])
@@ -58,21 +65,57 @@ model Warehouse {
   updatedAt DateTime @updatedAt
   stockMovementLines StockMovementLine[]
   inventoryBalances   InventoryBalance[]
+  purchaseReceiptLines PurchaseReceiptLine[]
 
   @@index([name])
 }
 
 model Supplier {
-  id        Int      @id @default(autoincrement())
+  id        Int              @id @default(autoincrement())
   name      String
-  email     String?  @unique
+  email     String?          @unique
   phone     String?
   address   String?
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActive  Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  purchaseReceipts PurchaseReceipt[]
 
   @@index([name])
+}
+
+model PurchaseReceipt {
+  id            Int                   @id @default(autoincrement())
+  receiptNumber String                @unique
+  supplierId    Int
+  supplier      Supplier              @relation(fields: [supplierId], references: [id])
+  status        PurchaseReceiptStatus @default(DRAFT)
+  reference     String?
+  receivedAt    DateTime
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  lines         PurchaseReceiptLine[]
+
+  @@index([supplierId])
+  @@index([status])
+  @@index([receivedAt])
+}
+
+model PurchaseReceiptLine {
+  id               Int              @id @default(autoincrement())
+  purchaseReceiptId Int
+  purchaseReceipt  PurchaseReceipt  @relation(fields: [purchaseReceiptId], references: [id])
+  productId        Int
+  product          Product          @relation(fields: [productId], references: [id])
+  warehouseId      Int
+  warehouse        Warehouse        @relation(fields: [warehouseId], references: [id])
+  quantity         Decimal
+  unitCost         Decimal
+  createdAt        DateTime         @default(now())
+
+  @@index([purchaseReceiptId])
+  @@index([productId])
+  @@index([warehouseId])
 }
 
 model StockMovement {
