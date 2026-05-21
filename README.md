@@ -69,3 +69,33 @@ Every movement is **permanently logged** — you can always look back at the ful
 | Database | Neon Serverless PostgreSQL |
 | ORM | Prisma |
 | Validation | Zod |
+
+---
+
+## How Features Are Built (Step-by-Step)
+
+Every feature in this system follows the same incremental process — from database to UI. Here's an example using the **Supplier** feature:
+
+| # | Step | What It Does |
+|---|------|-------------|
+| 1 | Create Supplier Database Schema Only | Define the Supplier table in Prisma schema and run the migration |
+| 2 | Add Supplier Zod Validation Schema Only | Define rules for valid supplier data (name required, email format, etc.) |
+| 3 | Implement Supplier Creation Server Action Only | Write the server-side logic to insert a new supplier into the database |
+| 4 | Create Supplier List Query Only | Write the database query to fetch all suppliers |
+| 5 | Build Supplier List Page Only (`/suppliers`) | Create the page that displays the supplier list |
+| 6 | Build Supplier Creation Form Only | Build the HTML form users fill out to add a supplier |
+| 7 | Add Supplier Search Query Support Only | Update the query to search suppliers by name or keyword |
+| 8 | Add Supplier Search UI Only | Add a search box to the supplier list page |
+| 9 | Add Supplier Detail Query Only | Write the query to fetch a single supplier by ID |
+| 10 | Build Supplier Detail Page Only | Create the page showing full supplier info |
+| 11 | Add Supplier Update Validation Schema Only | Define rules for editing supplier data |
+| 12 | Implement Supplier Update Server Action Only | Write the server-side logic to update a supplier |
+| 13 | Build Supplier Update Form Only | Build the form for editing supplier details |
+| 14 | Implement Supplier Deactivation Server Action Only | Write the logic to mark a supplier as inactive (soft delete) |
+| 15 | Add Supplier Deactivation UI Only | Add a "Deactivate" button to the supplier detail page |
+| 16 | Implement Supplier Reactivation Server Action Only | Write the logic to mark a supplier as active again |
+| 17 | Add Supplier Reactivation UI Only | Add a "Reactivate" button to the supplier detail page |
+| 18 | Add Active Status Filter To Supplier Query Only | Update the list query to filter by active/inactive status |
+| 19 | Add Supplier Status Filter UI Only | Add a dropdown to the list page to filter by status |
+
+This same pattern applies to Products, Categories, Warehouses, and any future feature.
