@@ -1,7 +1,15 @@
+import Link from "next/link"
 import Form from "next/form"
 import { Input } from "@/components/ui/input"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import {
   Table,
@@ -72,18 +80,19 @@ export default async function InventoryPage({ searchParams }: Props) {
           <Label htmlFor="product-filter">
             Product
           </Label>
-          <select
-            id="product-filter"
-            name="productId"
-            className="flex h-9 w-full max-w-xs rounded-4xl border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:border-ring appearance-none text-foreground"
-          >
-            <option value="">All Products</option>
-            {products.map((p) => (
-              <option key={p.id} value={String(p.id)} selected={productId === String(p.id)}>
-                {p.sku} — {p.name}
-              </option>
-            ))}
-          </select>
+          <Select name="productId" defaultValue={productId ?? ""}>
+            <SelectTrigger className="w-full max-w-xs" id="product-filter">
+              <SelectValue placeholder="All Products" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Products</SelectItem>
+              {products.map((p) => (
+                <SelectItem key={p.id} value={String(p.id)}>
+                  {p.sku} — {p.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button type="submit" size="xs">
             Filter
           </Button>
@@ -95,18 +104,19 @@ export default async function InventoryPage({ searchParams }: Props) {
           <Label htmlFor="warehouse-filter">
             Warehouse
           </Label>
-          <select
-            id="warehouse-filter"
-            name="warehouseId"
-            className="flex h-9 w-full max-w-xs rounded-4xl border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:border-ring appearance-none text-foreground"
-          >
-            <option value="">All Warehouses</option>
-            {warehouses.map((w) => (
-              <option key={w.id} value={String(w.id)} selected={warehouseId === String(w.id)}>
-                {w.code} — {w.name}
-              </option>
-            ))}
-          </select>
+          <Select name="warehouseId" defaultValue={warehouseId ?? ""}>
+            <SelectTrigger className="w-full max-w-xs" id="warehouse-filter">
+              <SelectValue placeholder="All Warehouses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Warehouses</SelectItem>
+              {warehouses.map((w) => (
+                <SelectItem key={w.id} value={String(w.id)}>
+                  {w.code} — {w.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button type="submit" size="xs">
             Filter
           </Button>
@@ -151,12 +161,12 @@ export default async function InventoryPage({ searchParams }: Props) {
 
       <div className="flex items-center gap-4 mt-4">
         {pagination.page > 1 ? (
-          <a
+          <Link
             href={paginationHref(baseUrl, pagination.page - 1, pagination.pageSize, search, productId, warehouseId)}
             className={cn(buttonVariants({ variant: "outline" }))}
           >
             Previous
-          </a>
+          </Link>
         ) : (
           <Button variant="outline" disabled>
             Previous
@@ -168,12 +178,12 @@ export default async function InventoryPage({ searchParams }: Props) {
         </span>
 
         {pagination.page < pagination.totalPages ? (
-          <a
+          <Link
             href={paginationHref(baseUrl, pagination.page + 1, pagination.pageSize, search, productId, warehouseId)}
             className={cn(buttonVariants({ variant: "outline" }))}
           >
             Next
-          </a>
+          </Link>
         ) : (
           <Button variant="outline" disabled>
             Next

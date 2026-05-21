@@ -5,7 +5,21 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card"
 import { createProduct, type CreateProductResult } from "@/features/products/actions/create-product.action"
 import type { ActiveProductCategoryOption } from "@/features/product-categories/queries/list-active-product-categories.query"
 
@@ -27,79 +41,73 @@ export function CreateProductForm({ categories }: Props) {
   }, [state])
 
   return (
-    <form ref={formRef} action={formAction} className="space-y-4 border rounded p-4 mb-8">
-      <h2 className="text-lg font-semibold">New Product</h2>
-
-      {state?.success && (
-        <p className="text-green-700 bg-green-100 border border-green-300 rounded px-3 py-2">
-          Product &quot;{state.data.name}&quot; created successfully.
-        </p>
-      )}
-
-      {state && !state.success && (
-        <p className="text-red-700 bg-red-100 border border-red-300 rounded px-3 py-2">
-          {state.error}
-        </p>
-      )}
-
-      <div>
-        <Label htmlFor="sku">SKU</Label>
-        <Input id="sku" name="sku" type="text" required />
-      </div>
-
-      <div>
-        <Label htmlFor="name">Name</Label>
-        <Input id="name" name="name" type="text" required />
-      </div>
-
-      <div>
-        <Label htmlFor="description">Description</Label>
-        <Textarea id="description" name="description" rows={3} />
-      </div>
-
-      <div>
-        <Label htmlFor="lowStockThreshold">Low Stock Threshold</Label>
-        <Input id="lowStockThreshold" name="lowStockThreshold" type="text" placeholder="Optional minimum stock level..." />
-      </div>
-
-      <div>
-        <Label htmlFor="categoryId">Category</Label>
-        <select
-          id="categoryId"
-          name="categoryId"
-          className={cn(
-            "flex h-9 w-full rounded-4xl border border-input bg-transparent px-3 py-1 text-base shadow-xs",
-            "transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium",
-            "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-3",
-            "focus-visible:ring-ring/30 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50",
-            "aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20",
-            "dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-            "appearance-none text-foreground"
+    <Card className="mb-8">
+      <CardHeader>
+        <CardTitle>New Product</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form ref={formRef} action={formAction} className="space-y-4">
+          {state?.success && (
+            <Alert variant="default" className="border-green-300 bg-green-50 text-green-800">
+              <AlertDescription>
+                Product &quot;{state.data.name}&quot; created successfully.
+              </AlertDescription>
+            </Alert>
           )}
-        >
-          <option value="">No category</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-      </div>
 
-      <div className="flex items-center gap-2">
-        <input
-          id="isActive"
-          name="isActive"
-          type="checkbox"
-          defaultChecked
-          className="h-4 w-4"
-        />
-        <Label htmlFor="isActive">Active</Label>
-      </div>
+          {state && !state.success && (
+            <Alert variant="destructive">
+              <AlertDescription>{state.error}</AlertDescription>
+            </Alert>
+          )}
 
-      <Button type="submit" disabled={isPending}>
-        {isPending ? "Creating..." : "Create Product"}
-      </Button>
-    </form>
+          <div>
+            <Label htmlFor="sku">SKU</Label>
+            <Input id="sku" name="sku" type="text" required />
+          </div>
+
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input id="name" name="name" type="text" required />
+          </div>
+
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Textarea id="description" name="description" rows={3} />
+          </div>
+
+          <div>
+            <Label htmlFor="lowStockThreshold">Low Stock Threshold</Label>
+            <Input id="lowStockThreshold" name="lowStockThreshold" type="text" placeholder="Optional minimum stock level..." />
+          </div>
+
+          <div>
+            <Label htmlFor="categoryId">Category</Label>
+            <Select name="categoryId" defaultValue="">
+              <SelectTrigger className="w-full" id="categoryId">
+                <SelectValue placeholder="No category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">No category</SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Checkbox id="isActive" name="isActive" defaultChecked />
+            <Label htmlFor="isActive">Active</Label>
+          </div>
+
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Creating..." : "Create Product"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   )
 }

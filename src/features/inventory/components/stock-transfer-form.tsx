@@ -4,7 +4,20 @@ import { useActionState, useRef, useEffect, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card"
 import { createStockTransfer, type CreateStockTransferResult } from "@/features/inventory/actions/create-stock-transfer.action"
 import type { ActiveProductOption } from "@/features/products/queries/list-active-products.query"
 import type { ActiveWarehouseOption } from "@/features/warehouses/queries/list-active-warehouses.query"
@@ -29,76 +42,80 @@ export function StockTransferForm({ products, warehouses }: Props) {
     }
   }, [state])
 
-  const selectClass = cn(
-    "flex h-9 w-full rounded-4xl border border-input bg-transparent px-3 py-1 text-base shadow-xs",
-    "transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium",
-    "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-ring/30 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50",
-    "aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20",
-    "dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-    "appearance-none text-foreground"
-  )
-
   const destWarehouses = warehouses.filter((w) => String(w.id) !== fromWarehouseId)
 
   return (
-    <form ref={formRef} action={formAction} className="space-y-4 border rounded p-4 mb-8">
-      <h2 className="text-lg font-semibold">Stock Transfer</h2>
+    <Card className="mb-8">
+      <CardHeader>
+        <CardTitle>Stock Transfer</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form ref={formRef} action={formAction} className="space-y-4">
+          {state?.success && (
+            <Alert variant="default" className="border-green-300 bg-green-50 text-green-800">
+              <AlertDescription>
+                Transfer posted (Movement #{state.data.movementId}).
+              </AlertDescription>
+            </Alert>
+          )}
 
-      {state?.success && (
-        <p className="text-green-700 bg-green-100 border border-green-300 rounded px-3 py-2">
-          Transfer posted (Movement #{state.data.movementId}).
-        </p>
-      )}
+          {state && !state.success && (
+            <Alert variant="destructive">
+              <AlertDescription>{state.error}</AlertDescription>
+            </Alert>
+          )}
 
-      {state && !state.success && (
-        <p className="text-red-700 bg-red-100 border border-red-300 rounded px-3 py-2">
-          {state.error}
-        </p>
-      )}
+          <div>
+            <Label htmlFor="transfer-product-id">Product</Label>
+            <Select name="productId" defaultValue="">
+              <SelectTrigger className="w-full" id="transfer-product-id">
+                <SelectValue placeholder="Select a product..." />
+              </SelectTrigger>
+              <SelectContent>
+                {products.map((p) => (
+                  <SelectItem key={p.id} value={String(p.id)}>
+                    {p.sku} — {p.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div>
-        <Label htmlFor="transfer-product-id">Product</Label>
-        <select id="transfer-product-id" name="productId" required className={selectClass}>
-          <option value="">Select a product...</option>
-          {products.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.sku} — {p.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          <div>
+            <Label htmlFor="transfer-from-warehouse">Source Warehouse</Label>
+            <Select
+              name="fromWarehouseId"
+              value={fromWarehouseId}
+              onValueChange={(v) => setFromWarehouseId(v ?? "")}
+            >
+              <SelectTrigger className="w-full" id="transfer-from-warehouse">
+                <SelectValue placeholder="Select source warehouse..." />
+              </SelectTrigger>
+              <SelectContent>
+                {warehouses.map((w) => (
+                  <SelectItem key={w.id} value={String(w.id)}>
+                    {w.code} — {w.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div>
-        <Label htmlFor="transfer-from-warehouse">Source Warehouse</Label>
-        <select
-          id="transfer-from-warehouse"
-          name="fromWarehouseId"
-          required
-          className={selectClass}
-          value={fromWarehouseId}
-          onChange={(e) => setFromWarehouseId(e.target.value)}
-        >
-          <option value="">Select source warehouse...</option>
-          {warehouses.map((w) => (
-            <option key={w.id} value={w.id}>
-              {w.code} — {w.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <Label htmlFor="transfer-to-warehouse">Destination Warehouse</Label>
-        <select id="transfer-to-warehouse" name="toWarehouseId" required className={selectClass}>
-          <option value="">Select destination warehouse...</option>
-          {destWarehouses.map((w) => (
-            <option key={w.id} value={w.id}>
-              {w.code} — {w.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          <div>
+            <Label htmlFor="transfer-to-warehouse">Destination Warehouse</Label>
+            <Select name="toWarehouseId" defaultValue="">
+              <SelectTrigger className="w-full" id="transfer-to-warehouse">
+                <SelectValue placeholder="Select destination warehouse..." />
+              </SelectTrigger>
+              <SelectContent>
+                {destWarehouses.map((w) => (
+                  <SelectItem key={w.id} value={String(w.id)}>
+                    {w.code} — {w.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
       <div>
         <Label htmlFor="transfer-quantity">Quantity</Label>
@@ -118,6 +135,8 @@ export function StockTransferForm({ products, warehouses }: Props) {
       <Button type="submit" disabled={isPending}>
         {isPending ? "Posting..." : "Post Transfer"}
       </Button>
-    </form>
+      </form>
+      </CardContent>
+    </Card>
   )
 }

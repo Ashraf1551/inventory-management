@@ -4,7 +4,20 @@ import { useActionState, useRef, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card"
 import { createStockAdjustment, type CreateStockAdjustmentResult } from "@/features/inventory/actions/create-stock-adjustment.action"
 import type { ActiveProductOption } from "@/features/products/queries/list-active-products.query"
 import type { ActiveWarehouseOption } from "@/features/warehouses/queries/list-active-warehouses.query"
@@ -27,74 +40,79 @@ export function StockAdjustmentForm({ products, warehouses }: Props) {
     }
   }, [state])
 
-  const selectClass = cn(
-    "flex h-9 w-full rounded-4xl border border-input bg-transparent px-3 py-1 text-base shadow-xs",
-    "transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium",
-    "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-3",
-    "focus-visible:ring-ring/30 focus-visible:border-ring disabled:cursor-not-allowed disabled:opacity-50",
-    "aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20",
-    "dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-    "appearance-none text-foreground"
-  )
-
   return (
-    <form ref={formRef} action={formAction} className="space-y-4 border rounded p-4 mb-8">
-      <h2 className="text-lg font-semibold">Stock Adjustment</h2>
+    <Card className="mb-8">
+      <CardHeader>
+        <CardTitle>Stock Adjustment</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form ref={formRef} action={formAction} className="space-y-4">
+          {state?.success && (
+            <Alert variant="default" className="border-green-300 bg-green-50 text-green-800">
+              <AlertDescription>
+                Adjustment posted (Movement #{state.data.movementId}).
+              </AlertDescription>
+            </Alert>
+          )}
 
-      {state?.success && (
-        <p className="text-green-700 bg-green-100 border border-green-300 rounded px-3 py-2">
-          Adjustment posted (Movement #{state.data.movementId}).
-        </p>
-      )}
+          {state && !state.success && (
+            <Alert variant="destructive">
+              <AlertDescription>{state.error}</AlertDescription>
+            </Alert>
+          )}
 
-      {state && !state.success && (
-        <p className="text-red-700 bg-red-100 border border-red-300 rounded px-3 py-2">
-          {state.error}
-        </p>
-      )}
+          <div>
+            <Label htmlFor="adjustment-product-id">Product</Label>
+            <Select name="productId" defaultValue="">
+              <SelectTrigger className="w-full" id="adjustment-product-id">
+                <SelectValue placeholder="Select a product..." />
+              </SelectTrigger>
+              <SelectContent>
+                {products.map((p) => (
+                  <SelectItem key={p.id} value={String(p.id)}>
+                    {p.sku} — {p.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div>
-        <Label htmlFor="productId">Product</Label>
-        <select id="productId" name="productId" required className={selectClass}>
-          <option value="">Select a product...</option>
-          {products.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.sku} — {p.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          <div>
+            <Label htmlFor="adjustment-warehouse-id">Warehouse</Label>
+            <Select name="warehouseId" defaultValue="">
+              <SelectTrigger className="w-full" id="adjustment-warehouse-id">
+                <SelectValue placeholder="Select a warehouse..." />
+              </SelectTrigger>
+              <SelectContent>
+                {warehouses.map((w) => (
+                  <SelectItem key={w.id} value={String(w.id)}>
+                    {w.code} — {w.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div>
-        <Label htmlFor="warehouseId">Warehouse</Label>
-        <select id="warehouseId" name="warehouseId" required className={selectClass}>
-          <option value="">Select a warehouse...</option>
-          {warehouses.map((w) => (
-            <option key={w.id} value={w.id}>
-              {w.code} — {w.name}
-            </option>
-          ))}
-        </select>
-      </div>
+          <div>
+            <Label htmlFor="quantityDelta">Quantity Delta</Label>
+            <Input id="quantityDelta" name="quantityDelta" type="text" required placeholder="e.g. 10 or -5" />
+          </div>
 
-      <div>
-        <Label htmlFor="quantityDelta">Quantity Delta</Label>
-        <Input id="quantityDelta" name="quantityDelta" type="text" required placeholder="e.g. 10 or -5" />
-      </div>
+          <div>
+            <Label htmlFor="reference">Reference</Label>
+            <Input id="reference" name="reference" type="text" placeholder="Optional reference..." />
+          </div>
 
-      <div>
-        <Label htmlFor="reference">Reference</Label>
-        <Input id="reference" name="reference" type="text" placeholder="Optional reference..." />
-      </div>
+          <div>
+            <Label htmlFor="occurredAt">Occurred Date</Label>
+            <Input id="occurredAt" name="occurredAt" type="date" />
+          </div>
 
-      <div>
-        <Label htmlFor="occurredAt">Occurred Date</Label>
-        <Input id="occurredAt" name="occurredAt" type="date" />
-      </div>
-
-      <Button type="submit" disabled={isPending}>
-        {isPending ? "Posting..." : "Post Adjustment"}
-      </Button>
-    </form>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? "Posting..." : "Post Adjustment"}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   )
 }

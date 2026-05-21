@@ -1,7 +1,15 @@
+import Link from "next/link"
 import Form from "next/form"
 import { Input } from "@/components/ui/input"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 import {
   Table,
@@ -101,7 +109,7 @@ export default async function MovementsPage({ searchParams }: Props) {
           <input type="hidden" name="warehouseId" value={currentWarehouseId ?? ""} />
           <input type="hidden" name="from" value={currentFrom ?? ""} />
           <input type="hidden" name="to" value={currentTo ?? ""} />
-          <span className="text-sm font-medium">Type:</span>
+          <Label>Type:</Label>
           {MOVEMENT_TYPE_OPTIONS.map((opt) => (
             <Button
               key={opt.value}
@@ -123,7 +131,7 @@ export default async function MovementsPage({ searchParams }: Props) {
           <input type="hidden" name="warehouseId" value={currentWarehouseId ?? ""} />
           <input type="hidden" name="from" value={currentFrom ?? ""} />
           <input type="hidden" name="to" value={currentTo ?? ""} />
-          <span className="text-sm font-medium">Status:</span>
+          <Label>Status:</Label>
           {MOVEMENT_STATUS_OPTIONS.map((opt) => (
             <Button
               key={opt.value}
@@ -148,18 +156,19 @@ export default async function MovementsPage({ searchParams }: Props) {
           <Label htmlFor="movements-product-filter">
             Product
           </Label>
-          <select
-            id="movements-product-filter"
-            name="productId"
-            className="flex h-9 w-full max-w-xs rounded-4xl border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:border-ring appearance-none text-foreground"
-          >
-            <option value="">All Products</option>
-            {products.map((p) => (
-              <option key={p.id} value={String(p.id)} selected={currentProductId === String(p.id)}>
-                {p.sku} — {p.name}
-              </option>
-            ))}
-          </select>
+          <Select name="productId" defaultValue={currentProductId ?? ""}>
+            <SelectTrigger className="w-full max-w-xs" id="movements-product-filter">
+              <SelectValue placeholder="All Products" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Products</SelectItem>
+              {products.map((p) => (
+                <SelectItem key={p.id} value={String(p.id)}>
+                  {p.sku} — {p.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button type="submit" size="xs">
             Filter
           </Button>
@@ -175,18 +184,19 @@ export default async function MovementsPage({ searchParams }: Props) {
           <Label htmlFor="movements-warehouse-filter">
             Warehouse
           </Label>
-          <select
-            id="movements-warehouse-filter"
-            name="warehouseId"
-            className="flex h-9 w-full max-w-xs rounded-4xl border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:border-ring appearance-none text-foreground"
-          >
-            <option value="">All Warehouses</option>
-            {warehouses.map((w) => (
-              <option key={w.id} value={String(w.id)} selected={currentWarehouseId === String(w.id)}>
-                {w.code} — {w.name}
-              </option>
-            ))}
-          </select>
+          <Select name="warehouseId" defaultValue={currentWarehouseId ?? ""}>
+            <SelectTrigger className="w-full max-w-xs" id="movements-warehouse-filter">
+              <SelectValue placeholder="All Warehouses" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Warehouses</SelectItem>
+              {warehouses.map((w) => (
+                <SelectItem key={w.id} value={String(w.id)}>
+                  {w.code} — {w.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button type="submit" size="xs">
             Filter
           </Button>
@@ -279,12 +289,12 @@ export default async function MovementsPage({ searchParams }: Props) {
 
       <div className="flex items-center gap-4 mt-4">
         {pagination.page > 1 ? (
-          <a
+          <Link
             href={paginationHref(baseUrl, pagination.page - 1, pagination.pageSize, search, currentType, currentStatus, currentProductId, currentWarehouseId, currentFrom, currentTo)}
             className={cn(buttonVariants({ variant: "outline" }))}
           >
             Previous
-          </a>
+          </Link>
         ) : (
           <Button variant="outline" disabled>
             Previous
@@ -296,12 +306,12 @@ export default async function MovementsPage({ searchParams }: Props) {
         </span>
 
         {pagination.page < pagination.totalPages ? (
-          <a
+          <Link
             href={paginationHref(baseUrl, pagination.page + 1, pagination.pageSize, search, currentType, currentStatus, currentProductId, currentWarehouseId, currentFrom, currentTo)}
             className={cn(buttonVariants({ variant: "outline" }))}
           >
             Next
-          </a>
+          </Link>
         ) : (
           <Button variant="outline" disabled>
             Next

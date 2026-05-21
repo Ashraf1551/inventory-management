@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { reactivateWarehouse } from "@/features/warehouses/actions/reactivate-warehouse.action"
 
 type Props = {
@@ -39,18 +40,18 @@ export function ReactivateWarehouseButton({ warehouseId, warehouseName }: Props)
 
   if (success) {
     return (
-      <p className="text-green-700 bg-green-100 border border-green-300 rounded px-3 py-2">
-        Warehouse reactivated.
-      </p>
+      <Alert variant="default" className="border-green-300 bg-green-50 text-green-800">
+        <AlertDescription>Warehouse reactivated.</AlertDescription>
+      </Alert>
     )
   }
 
   return (
     <div>
       {error && (
-        <p className="text-red-700 bg-red-100 border border-red-300 rounded px-3 py-2 mb-3">
-          {error}
-        </p>
+        <Alert variant="destructive" className="mb-3">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {showConfirm ? (

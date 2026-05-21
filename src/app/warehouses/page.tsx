@@ -113,12 +113,12 @@ export default async function WarehousesPage({ searchParams }: Props) {
 
       <div className="flex items-center gap-4 mt-4">
         {pagination.page > 1 ? (
-          <a
+          <Link
             href={paginationHref(baseUrl, pagination.page - 1, pagination.pageSize, search, status)}
             className={cn(buttonVariants({ variant: "outline" }))}
           >
             Previous
-          </a>
+          </Link>
         ) : (
           <Button variant="outline" disabled>
             Previous
@@ -130,12 +130,12 @@ export default async function WarehousesPage({ searchParams }: Props) {
         </span>
 
         {pagination.page < pagination.totalPages ? (
-          <a
+          <Link
             href={paginationHref(baseUrl, pagination.page + 1, pagination.pageSize, search, status)}
             className={cn(buttonVariants({ variant: "outline" }))}
           >
             Next
-          </a>
+          </Link>
         ) : (
           <Button variant="outline" disabled>
             Next

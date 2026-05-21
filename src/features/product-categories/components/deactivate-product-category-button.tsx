@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from "react"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { deactivateProductCategory } from "@/features/product-categories/actions/deactivate-product-category.action"
 
 type Props = {
@@ -39,23 +41,23 @@ export function DeactivateProductCategoryButton({ categoryId, categoryName }: Pr
 
   if (success) {
     return (
-      <p className="text-green-700 bg-green-100 border border-green-300 rounded px-3 py-2">
-        Category deactivated.
-      </p>
+      <Alert variant="default" className="border-green-300 bg-green-50 text-green-800">
+        <AlertDescription>Category deactivated.</AlertDescription>
+      </Alert>
     )
   }
 
   return (
     <div>
       {error && (
-        <p className="text-red-700 bg-red-100 border border-red-300 rounded px-3 py-2 mb-3">
-          {error}
-        </p>
+        <Alert variant="destructive" className="mb-3">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       {showConfirm ? (
         <div className="flex items-center gap-2">
-          <span className="text-sm">Deactivate &quot;{categoryName}&quot;?</span>
+          <Label>Deactivate &quot;{categoryName}&quot;?</Label>
           <Button
             onClick={handleConfirm}
             disabled={isPending}
